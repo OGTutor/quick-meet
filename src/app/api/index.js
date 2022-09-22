@@ -1,7 +1,7 @@
-import * as users from './fake.api/user.api';
-import 'bootstrap/dist/css/bootstrap.css';
+import * as users from "./fake.api/user.api";
+import "bootstrap/dist/css/bootstrap.css";
 
 const API = {
-	users,
+    users
 };
 export default API;
