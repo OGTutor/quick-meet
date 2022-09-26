@@ -2,7 +2,13 @@ import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
-const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
+const Pagination = ({
+    itemsCount,
+    pageSize,
+    onPageChange,
+    currentPage,
+    onPageChangeNextPrevious
+}) => {
     const pageCount = Math.ceil(itemsCount / pageSize);
 
     if (pageCount === 1) return null;
@@ -15,7 +21,16 @@ const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
                 <nav>
                     <ul className="pagination justify-content-center">
                         <li className="page-item" key={"page_previous"}>
-                            <button className="page-link">
+                            <button
+                                className="page-link"
+                                onClick={() =>
+                                    onPageChangeNextPrevious(
+                                        currentPage,
+                                        "previous",
+                                        pages.length
+                                    )
+                                }
+                            >
                                 <span aria-hidden="true">&laquo;</span>
                             </button>
                         </li>
@@ -36,7 +51,16 @@ const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
                             </li>
                         ))}
                         <li className="page-item" key={"page_next"}>
-                            <button className="page-link">
+                            <button
+                                className="page-link"
+                                onClick={() =>
+                                    onPageChangeNextPrevious(
+                                        currentPage,
+                                        "next",
+                                        pages.length
+                                    )
+                                }
+                            >
                                 <span aria-hidden="true">&raquo;</span>
                             </button>
                         </li>
@@ -51,7 +75,8 @@ Pagination.propTypes = {
     itemsCount: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     onPageChange: PropTypes.func.isRequired,
-    currentPage: PropTypes.number.isRequired
+    currentPage: PropTypes.number.isRequired,
+    onPageChangeNextPrevious: PropTypes.func.isRequired
 };
 
 export default Pagination;
