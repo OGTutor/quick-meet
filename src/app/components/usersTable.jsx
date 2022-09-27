@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import User from "./user";
 import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 import BookMark from "./bookmark";
@@ -22,7 +21,10 @@ const UserTable = ({
         },
         professions: { path: "profession.name", name: "Job" },
         completedMeetings: { path: "completedMeetings", name: "Meets, times" },
-        rate: { path: "rate", name: "Rating" },
+        rate: {
+            path: "rate",
+            name: "Rating"
+        },
         bookmark: {
             path: "bookmark",
             name: "Favorite",
@@ -49,11 +51,6 @@ const UserTable = ({
         <table className="table">
             <TableHeader {...{ onSort, selectedSort, columns }} />
             <TableBody {...{ columns, data: users }} />
-            {/* <tbody>
-                {users.map((user) => (
-                    <User key={user._id} {...rest} {...user} />
-                ))}
-            </tbody> */}
         </table>
     );
 };
