@@ -131,7 +131,7 @@ const Users = () => {
             </div>
         );
     }
-    return "Loading...";
+    return <h1>Loading...</h1>;
 };
 
 Users.propTypes = {

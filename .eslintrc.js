@@ -18,6 +18,7 @@ module.exports = {
             { anonymous: "always", named: "never" }
         ],
         quotes: ["error", "double", { allowTemplateLiterals: true }],
-        "no-unused-vars": ["warn", { varsIgnorePattern: "VARIABLE_NAME" }]
+        "no-unused-vars": ["warn", { varsIgnorePattern: "VARIABLE_NAME" }],
+        "multiline-ternary": ["warn", "never"]
     }
 };
