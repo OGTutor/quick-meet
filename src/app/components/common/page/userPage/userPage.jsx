@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import QualitiesList from "../qualitiesList";
+import QualitiesList from "../../../ui/qualities/qualitiesList";
 
-import api from "../../api";
+import api from "../../../../api";
 
 const UserPage = () => {
     const [user, setUser] = useState();
