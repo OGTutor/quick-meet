@@ -20,7 +20,7 @@ const Pagination = ({
             {pageCount > 0 && (
                 <nav>
                     <ul className="pagination justify-content-center">
-                        <li className="page-item" key={"page_previous"}>
+                        <li className="page-item " key={"page_previous"}>
                             <button
                                 className="page-link"
                                 onClick={() =>

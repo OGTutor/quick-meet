@@ -51,8 +51,7 @@ const LoginPage = () => {
         event.preventDefault();
         const isValid = validate();
 
-        if (!isValid) return;
-        console.log(event);
+        if (!isValid) return null;
     };
 
     return (

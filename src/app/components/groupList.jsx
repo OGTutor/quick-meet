@@ -9,7 +9,7 @@ const GroupList = ({
     selectedItem
 }) => {
     return (
-        <ul className="list-group">
+        <ul className="shadow list-group">
             {Object.keys(items).map((item) => (
                 <li
                     key={items[item][valueProperty]}
