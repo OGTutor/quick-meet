@@ -9,8 +9,8 @@ const Layout = () => {
                     Main
                 </NavLink>
 
-                <NavLink className="nav-link" to="/login">
-                    Login
+                <NavLink className="nav-link" to="/authorization">
+                    Authorization
                 </NavLink>
 
                 <NavLink className="nav-link" to="/users">

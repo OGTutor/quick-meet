@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 
 const LoginForm = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
 
@@ -11,6 +13,10 @@ const LoginForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
+    };
+
+    const handleBackToRegister = () => {
+        navigate("/authorization/:login/register");
     };
 
     const validatorConfig = {
@@ -54,37 +60,45 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-6 offset-md-3 shadow p-4">
-                    <h3 className="mb-4">Login</h3>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Email"
-                            name="email"
-                            value={data.email}
-                            onChange={handleChange}
-                            error={errors.email}
-                        />
-                        <TextField
-                            label="Password"
-                            type="password"
-                            name="password"
-                            value={data.password}
-                            onChange={handleChange}
-                            error={errors.password}
-                        />
+        <>
+            <div className="container mt-5">
+                <div className="row">
+                    <div className="col-md-6 offset-md-3 shadow p-4">
+                        <h3 className="mb-4">Login</h3>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Email"
+                                name="email"
+                                value={data.email}
+                                onChange={handleChange}
+                                error={errors.email}
+                            />
+                            <TextField
+                                label="Password"
+                                type="password"
+                                name="password"
+                                value={data.password}
+                                onChange={handleChange}
+                                error={errors.password}
+                            />
+                            <button
+                                type="submit"
+                                disabled={!isValid}
+                                className="btn btn-outline-dark w-100 mx-auto"
+                            >
+                                Submit
+                            </button>
+                        </form>
                         <button
-                            type="submit"
-                            disabled={!isValid}
-                            className="btn btn-outline-dark w-100 mx-auto"
+                            className="btn btn-outline-primary mt-4"
+                            onClick={() => handleBackToRegister()}
                         >
-                            Submit
+                            Create account
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
