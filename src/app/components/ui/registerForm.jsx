@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import SelectField from "../common/form/selectField";
+import RadioField from "../common/form/radioField";
 import api from "../../api";
 
 const RegisterForm = () => {
@@ -12,7 +13,8 @@ const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
-        profession: ""
+        profession: "",
+        sex: "male"
     });
     const [errors, setErrors] = useState({});
 
@@ -103,6 +105,16 @@ const RegisterForm = () => {
                                 defaultOption="Choose..."
                                 options={professions}
                                 error={errors.profession}
+                            />
+                            <RadioField
+                                options={[
+                                    { name: "Male", value: "male" },
+                                    { name: "Female", value: "female" },
+                                    { name: "Other", value: "other" }
+                                ]}
+                                value={data.sex}
+                                name="sex"
+                                onChange={handleChange}
                             />
                             <button
                                 type="submit"
