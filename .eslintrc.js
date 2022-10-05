@@ -19,6 +19,6 @@ module.exports = {
         ],
         quotes: ["error", "double", { allowTemplateLiterals: true }],
         "no-unused-vars": ["warn", { varsIgnorePattern: "VARIABLE_NAME" }],
-        "multiline-ternary": ["warn", "always-multiline"]
+        "multiline-ternary": ["off"]
     }
 };
