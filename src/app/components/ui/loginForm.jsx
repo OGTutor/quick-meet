@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
@@ -22,7 +22,7 @@ const LoginForm = () => {
     };
 
     const handleBackToRegister = () => {
-        navigate("/authorization/:login/register");
+        navigate(`/authorization/:login/register`);
     };
 
     const validatorConfig = {

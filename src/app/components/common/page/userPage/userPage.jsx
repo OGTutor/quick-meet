@@ -17,6 +17,9 @@ const UserPage = () => {
     const handleBackAllUsers = () => {
         navigate("/users", { replace: true });
     };
+    const handleGoToEditUser = () => {
+        navigate(`/users/${id}/edit`, { replace: true });
+    };
 
     if (user) {
         return (
@@ -26,11 +29,30 @@ const UserPage = () => {
                 <QualitiesList qualities={user.qualities} />
                 <p>{`Completed Meetings: ${user.completedMeetings}`}</p>
                 <h2>{`Rate: ${user.rate}`}</h2>
-                <button onClick={() => handleBackAllUsers()}>All Users</button>
+                <button
+                    className="btn btn-outline-primary"
+                    onClick={() => handleBackAllUsers()}
+                >
+                    All Users
+                </button>
+                <button
+                    className="btn btn-outline-secondary m-2"
+                    onClick={() => handleGoToEditUser()}
+                >
+                    Edit User
+                </button>
             </div>
         );
     }
-    return <h1>Loading...</h1>;
+    return (
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-md-6 offset-md-3 shadow p-4">
+                    <h1>Loading...</h1>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default UserPage;

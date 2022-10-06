@@ -112,6 +112,7 @@ const RegisterForm = () => {
                                 value={data.profession}
                                 onChange={handleChange}
                                 defaultOption="Choose..."
+                                name="professions"
                                 options={professions}
                                 error={errors.profession}
                             />
@@ -129,6 +130,7 @@ const RegisterForm = () => {
                             <MultiSelectField
                                 options={qualities}
                                 onChange={handleChange}
+                                defaultValue={data.qualities}
                                 name="qualities"
                                 label="Choose your qualities"
                             />

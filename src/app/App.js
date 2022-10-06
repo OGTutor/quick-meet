@@ -7,6 +7,7 @@ import LoginForm from "./components/ui/loginForm";
 import RegisterForm from "./components/ui/registerForm";
 import Users from "./layouts/users";
 import UserPage from "./components/common/page/userPage/userPage";
+import EditUser from "./components/common/page/userPage/editUser/editUser";
 import NotFoundPage from "./layouts/notFoundPage";
 
 import Layout from "./components/ui/layout";
@@ -28,6 +29,7 @@ const App = () => {
                     />
                     <Route path="users" element={<Users />} />
                     <Route path="users/:id" element={<UserPage />} />
+                    <Route path="users/:id/edit" element={<EditUser />} />
                     <Route path="404" element={<NotFoundPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Route>
