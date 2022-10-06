@@ -6,6 +6,7 @@ import TextField from "../common/form/textField";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
+import CheckBoxField from "../common/form/checkBoxField";
 import api from "../../api";
 
 const RegisterForm = () => {
@@ -17,7 +18,8 @@ const RegisterForm = () => {
         password: "",
         profession: "",
         sex: "male",
-        qualities: []
+        qualities: [],
+        license: false
     });
     const [errors, setErrors] = useState({});
 
@@ -26,14 +28,11 @@ const RegisterForm = () => {
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
 
-    // console.log(data);
-
     const handleBackToLogin = () => {
         navigate("/authorization/login");
     };
 
     const handleChange = (target) => {
-        console.log(target);
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -59,7 +58,12 @@ const RegisterForm = () => {
                 value: 8
             }
         },
-        profession: { isRequired: { message: "Profession is required!" } }
+        profession: { isRequired: { message: "Profession is required!" } },
+        license: {
+            isRequired: {
+                message: "You need to confirm the license agreement!"
+            }
+        }
     };
 
     useEffect(() => {
@@ -128,6 +132,14 @@ const RegisterForm = () => {
                                 name="qualities"
                                 label="Choose your qualities"
                             />
+                            <CheckBoxField
+                                value={data.license}
+                                onChange={handleChange}
+                                name="license"
+                                error={errors.license}
+                            >
+                                I agree to the <a>license agreement</a>
+                            </CheckBoxField>
                             <button
                                 type="submit"
                                 disabled={!isValid}
