@@ -12,37 +12,75 @@ import api from "../../../../../api";
 const EditUser = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [professions, setProfession] = useState();
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState({
+        name: "",
+        email: "",
+        profession: "",
+        sex: "male",
+        qualities: []
+    });
+    const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState({});
-    const [data, setData] = useState();
     const [errors, setErrors] = useState({});
 
-    console.log(data);
+    const getProfessionById = (id) => {
+        for (const prof in professions) {
+            const profData = professions[prof];
+            if (profData._id === id) return profData;
+        }
+    };
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality]._id) {
+                    qualitiesArray.push(qualities[quality]);
+                }
+            }
+        }
+        return qualitiesArray;
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const isValid = validate();
+        if (!isValid) return null;
+
+        const { profession, qualities } = data;
+        api.users.update(id, {
+            ...data,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        });
+        navigate(`/users/${id}`);
+    };
+
+    const transformData = (data) => {
+        return data.map((qual) => ({
+            label: qual.name,
+            value: qual._id
+        }));
+    };
 
     useEffect(() => {
+        setIsLoading(true);
+        api.users.getById(id).then(({ profession, qualities, ...data }) =>
+            setData((prevState) => ({
+                ...prevState,
+                ...data,
+                qualities: transformData(qualities),
+                profession: profession._id
+            }))
+        );
         api.professions.fetchAll().then((data) => setProfession(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
-        api.users.getById(id).then((data) => setData(data));
     }, []);
 
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
-
-    const handleSaveChanges = () => {
-        navigate(`/users/${id}`);
-        api.users.update(id, data).then((data) => setData(data));
-    };
-
-    const setUserQualities = () => {
-        return data.qualities.map((qualitie) => ({
-            label: qualitie.name,
-            value: qualitie._id
-        }));
-    };
+    useEffect(() => {
+        if (data._id) setIsLoading(false);
+    }, [data]);
 
     const validatorConfig = {
         email: {
@@ -58,6 +96,13 @@ const EditUser = () => {
         validate();
     }, [data]);
 
+    const handleChange = (target) => {
+        setData((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+    };
+
     const validate = () => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);
@@ -66,13 +111,7 @@ const EditUser = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const isValid = validate();
-
-        if (!isValid) return null;
-    };
-    if (data && professions && qualities) {
+    if (!isLoading && Object.keys(professions).length > 0) {
         return (
             <>
                 <div className="container mt-5">
@@ -96,7 +135,7 @@ const EditUser = () => {
                                 />
                                 <SelectField
                                     label="Choose profession"
-                                    value={data.profession._id}
+                                    value={data.profession}
                                     onChange={handleChange}
                                     defaultOption="Choose..."
                                     name="professions"
@@ -117,7 +156,7 @@ const EditUser = () => {
                                 <MultiSelectField
                                     options={qualities}
                                     onChange={handleChange}
-                                    defaultValue={setUserQualities()}
+                                    defaultValue={data.qualities}
                                     name="qualities"
                                     label="Choose qualities"
                                 />
@@ -125,7 +164,6 @@ const EditUser = () => {
                                     type="submit"
                                     disabled={!isValid}
                                     className="btn btn-outline-dark w-100 mx-auto"
-                                    onClick={() => handleSaveChanges()}
                                 >
                                     Refresh
                                 </button>

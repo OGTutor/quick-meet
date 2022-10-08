@@ -12,7 +12,7 @@ const UserPage = () => {
 
     useEffect(() => {
         api.users.getById(id).then((data) => setUser(data));
-    }, [id]);
+    }, []);
 
     const handleBackAllUsers = () => {
         navigate("/users", { replace: true });
