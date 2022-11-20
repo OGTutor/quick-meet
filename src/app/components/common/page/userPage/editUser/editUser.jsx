@@ -49,12 +49,13 @@ const EditUser = () => {
         if (!isValid) return null;
 
         const { profession, qualities } = data;
-        api.users.update(id, {
-            ...data,
-            profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
-        });
-        navigate(`/users/${id}`);
+        api.users
+            .update(id, {
+                ...data,
+                profession: getProfessionById(profession),
+                qualities: getQualities(qualities)
+            })
+            .then((data) => navigate(`/users/${data._id}`));
     };
 
     const transformData = (data) => {
