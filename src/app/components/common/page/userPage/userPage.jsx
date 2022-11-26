@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import QualitiesList from "../../../ui/qualities/qualitiesList";
-
-import api from "../../../../api";
+import { useUser } from "../../../../hooks/useUsers";
+import UserCard from "./userCard/userCard";
+import QualitiesCard from "./userQualitiesCard/qualitiesCard";
+import MeetingsCard from "./userMeetingsCard/meetingsCard";
+import CreateComments from "./userCreateComments/createComments";
 
 const UserPage = () => {
-    const [user, setUser] = useState();
-    const navigate = useNavigate();
+    const { getUser } = useUser();
     const { id } = useParams();
-
-    useEffect(() => {
-        api.users.getById(id).then((data) => setUser(data));
-    }, []);
+    const user = getUser(id);
+    const navigate = useNavigate();
+    console.log(user);
 
     const handleBackAllUsers = () => {
         navigate("/users", { replace: true });
@@ -23,24 +23,22 @@ const UserPage = () => {
 
     if (user) {
         return (
-            <div>
-                <h1>{user.name}</h1>
-                <h2>{`Profession: ${user.profession.name}`}</h2>
-                <QualitiesList qualities={user.qualities} />
-                <p>{`Completed Meetings: ${user.completedMeetings}`}</p>
-                <h2>{`Rate: ${user.rate}`}</h2>
-                <button
-                    className="btn btn-outline-primary"
-                    onClick={() => handleBackAllUsers()}
-                >
-                    All Users
-                </button>
-                <button
-                    className="btn btn-outline-secondary m-2"
-                    onClick={() => handleGoToEditUser()}
-                >
-                    Edit User
-                </button>
+            <div className="container">
+                <div className="row gutters-sm">
+                    <div className="col-md-4 mb-3">
+                        <UserCard
+                            name={user.name}
+                            profession={user.profession}
+                            rate={user.rate}
+                            goToEditUser={handleGoToEditUser}
+                        />
+                        <QualitiesCard qualities={user.qualities} />
+                        <MeetingsCard meetings={user.completedMeetings} />
+                    </div>
+                    <div className="col-md-8">
+                        <CreateComments />
+                    </div>
+                </div>
             </div>
         );
     }

@@ -6,8 +6,10 @@ import SelectField from "../../../form/selectField";
 import RadioField from "../../../form/radioField";
 import MultiSelectField from "../../../form/multiSelectField";
 import { validator } from "../../../../../utils/validator";
+import { useProfessions } from "../../../../../hooks/useProfession";
+import { useQualities } from "../../../../../hooks/useQualities";
 
-import api from "../../../../../api";
+// import api from "../../../../../api";
 
 const EditUser = () => {
     const { id } = useParams();
@@ -21,41 +23,44 @@ const EditUser = () => {
         sex: "male",
         qualities: []
     });
-    const [professions, setProfession] = useState([]);
-    const [qualities, setQualities] = useState({});
+    // const [professions, setProfession] = useState([]);
+    // const [qualities, setQualities] = useState({});
     const [errors, setErrors] = useState({});
-
-    const getProfessionById = (id) => {
-        for (const prof in professions) {
-            const profData = professions[prof];
-            if (profData._id === id) return profData;
-        }
-    };
-    const getQualities = (elements) => {
-        const qualitiesArray = [];
-        for (const elem of elements) {
-            for (const quality in qualities) {
-                if (elem.value === qualities[quality]._id) {
-                    qualitiesArray.push(qualities[quality]);
-                }
-            }
-        }
-        return qualitiesArray;
-    };
+    const { getProfessionsList } = useProfessions();
+    const { getQualitiesList } = useQualities();
+    const professions = getProfessionsList();
+    const qualities = getQualitiesList();
+    // const getProfessionById = (id) => {
+    //     for (const prof in professions) {
+    //         const profData = professions[prof];
+    //         if (profData._id === id) return profData;
+    //     }
+    // };
+    // const getQualities = (elements) => {
+    //     const qualitiesArray = [];
+    //     for (const elem of elements) {
+    //         for (const quality in qualities) {
+    //             if (elem.value === qualities[quality]._id) {
+    //                 qualitiesArray.push(qualities[quality]);
+    //             }
+    //         }
+    //     }
+    //     return qualitiesArray;
+    // };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
 
-        const { profession, qualities } = data;
-        api.users
-            .update(id, {
-                ...data,
-                profession: getProfessionById(profession),
-                qualities: getQualities(qualities)
-            })
-            .then((data) => navigate(`/users/${data._id}`));
+        // const { profession, qualities } = data;
+        // api.users
+        //     .update(id, {
+        //         ...data,
+        //         profession: getProfessionById(profession),
+        //         qualities: getQualities(qualities)
+        //     })
+        //     .then((data) => navigate(`/users/${data._id}`));
     };
 
     const transformData = (data) => {
@@ -67,16 +72,17 @@ const EditUser = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        api.users.getById(id).then(({ profession, qualities, ...data }) =>
-            setData((prevState) => ({
-                ...prevState,
-                ...data,
-                qualities: transformData(qualities),
-                profession: profession._id
-            }))
-        );
-        api.professions.fetchAll().then((data) => setProfession(data));
-        api.qualities.fetchAll().then((data) => setQualities(data));
+
+        // api.users.getById(id).then(({ profession, qualities, ...data }) =>
+        //     setData((prevState) => ({
+        //         ...prevState,
+        //         ...data,
+        //         qualities: transformData(qualities),
+        //         profession: profession._id
+        //     }))
+        // );
+        // api.professions.fetchAll().then((data) => setProfession(data));
+        // api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
 
     useEffect(() => {

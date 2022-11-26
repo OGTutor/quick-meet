@@ -10,7 +10,7 @@ export const useUser = () => {
     return useContext(UserContext);
 };
 
-const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -35,6 +35,10 @@ const UserProvider = ({ children }) => {
         }
     }
 
+    const getUser = (id) => {
+        return users.find((u) => u._id === id);
+    };
+
     function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);
@@ -42,7 +46,7 @@ const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ users }}>
+        <UserContext.Provider value={{ users, getUser }}>
             {!isLoading ? children : "Loading..."}
         </UserContext.Provider>
     );

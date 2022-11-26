@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Qualitie from "./qualitie";
+import Quality from "./quality";
 
 import { useQualities } from "../../../hooks/useQualities";
 
@@ -11,7 +11,7 @@ const QualitiesList = ({ qualities }) => {
         return (
             <>
                 {qualities.map((qual) => (
-                    <Qualitie key={qual} id={qual} />
+                    <Quality key={qual} id={qual} />
                 ))}
             </>
         );
