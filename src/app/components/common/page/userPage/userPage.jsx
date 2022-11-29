@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useUser } from "../../../../hooks/useUsers";
@@ -6,17 +6,15 @@ import UserCard from "./userCard/userCard";
 import QualitiesCard from "./userQualitiesCard/qualitiesCard";
 import MeetingsCard from "./userMeetingsCard/meetingsCard";
 import CreateComments from "./userCreateComments/createComments";
+import PublishedComments from "./userPublishedComments/comments";
 
 const UserPage = () => {
-    const { getUser } = useUser();
+    const [comments, setComments] = useState([]);
+    const { getUser, users } = useUser();
     const { id } = useParams();
     const user = getUser(id);
     const navigate = useNavigate();
-    console.log(user);
 
-    const handleBackAllUsers = () => {
-        navigate("/users", { replace: true });
-    };
     const handleGoToEditUser = () => {
         navigate(`/users/${id}/edit`, { replace: true });
     };
@@ -36,7 +34,8 @@ const UserPage = () => {
                         <MeetingsCard meetings={user.completedMeetings} />
                     </div>
                     <div className="col-md-8">
-                        <CreateComments />
+                        <CreateComments users={users} />
+                        <PublishedComments comments={comments} />
                     </div>
                 </div>
             </div>

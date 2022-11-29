@@ -8,12 +8,18 @@ import MultiSelectField from "../../../form/multiSelectField";
 import { validator } from "../../../../../utils/validator";
 import { useProfessions } from "../../../../../hooks/useProfession";
 import { useQualities } from "../../../../../hooks/useQualities";
+import { useUser } from "../../../../../hooks/useUsers";
 
 // import api from "../../../../../api";
 
 const EditUser = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { getUser, updateUser } = useUser();
+    const user = getUser(id);
+
+    const { qualities } = useQualities();
+    const { professions } = useProfessions();
 
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState({
@@ -23,37 +29,43 @@ const EditUser = () => {
         sex: "male",
         qualities: []
     });
-    // const [professions, setProfession] = useState([]);
-    // const [qualities, setQualities] = useState({});
+
+    const handleBackToUserPage = () => {
+        navigate(`/users/${id}`, { replace: true });
+    };
+
+    // const [allProfessions, setAllProfession] = useState([]);
+    // const [allQualities, setAllQualities] = useState({});
     const [errors, setErrors] = useState({});
-    const { getProfessionsList } = useProfessions();
-    const { getQualitiesList } = useQualities();
-    const professions = getProfessionsList();
-    const qualities = getQualitiesList();
-    // const getProfessionById = (id) => {
-    //     for (const prof in professions) {
-    //         const profData = professions[prof];
-    //         if (profData._id === id) return profData;
-    //     }
-    // };
-    // const getQualities = (elements) => {
-    //     const qualitiesArray = [];
-    //     for (const elem of elements) {
-    //         for (const quality in qualities) {
-    //             if (elem.value === qualities[quality]._id) {
-    //                 qualitiesArray.push(qualities[quality]);
-    //             }
-    //         }
-    //     }
-    //     return qualitiesArray;
-    // };
+    const getProfessionById = (id) => {
+        for (const prof in professions) {
+            const profData = professions[prof];
+            if (profData._id === id) return profData;
+        }
+    };
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality]._id) {
+                    qualitiesArray.push(qualities[quality]);
+                }
+            }
+        }
+        return qualitiesArray;
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
 
-        // const { profession, qualities } = data;
+        const { profession, qualities } = data;
+        updateUser(id, {
+            ...data,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        });
         // api.users
         //     .update(id, {
         //         ...data,
@@ -64,6 +76,10 @@ const EditUser = () => {
     };
 
     const transformData = (data) => {
+        // const { qualities } = useQualities();
+        const updatedQualities = qualities.filter((q) => q._id === data[0]);
+        console.log(qualities);
+
         return data.map((qual) => ({
             label: qual.name,
             value: qual._id
@@ -72,7 +88,12 @@ const EditUser = () => {
 
     useEffect(() => {
         setIsLoading(true);
-
+        setData((prevState) => ({
+            ...prevState,
+            ...user,
+            qualities: transformData(user.qualities),
+            profession: user.profession
+        }));
         // api.users.getById(id).then(({ profession, qualities, ...data }) =>
         //     setData((prevState) => ({
         //         ...prevState,
@@ -176,11 +197,22 @@ const EditUser = () => {
                                 </button>
                             </form>
                         </div>
+
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => handleBackToUserPage()}
+                        >
+                            <span className="small m-auto">
+                                <ion-icon name="caret-back-outline"></ion-icon>
+                            </span>
+                            User Page
+                        </button>
                     </div>
                 </div>
             </>
         );
     }
+
     return (
         <div className="container mt-5">
             <div className="row">
