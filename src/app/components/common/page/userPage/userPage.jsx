@@ -1,41 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React from "react";
+import { useParams } from "react-router-dom";
 
 import { useUser } from "../../../../hooks/useUsers";
-import UserCard from "./userCard/userCard";
-import QualitiesCard from "./userQualitiesCard/qualitiesCard";
-import MeetingsCard from "./userMeetingsCard/meetingsCard";
-import CreateComments from "./userCreateComments/createComments";
-import PublishedComments from "./userPublishedComments/comments";
+import UserCard from "../../../ui/userCard";
+import QualitiesCard from "../../../ui/qualitiesCard";
+import MeetingsCard from "../../../ui/meetingsCard";
+import Comments from "../../../ui/comments";
 
 const UserPage = () => {
-    const [comments, setComments] = useState([]);
-    const { getUser, users } = useUser();
+    const { getUser } = useUser();
     const { id } = useParams();
     const user = getUser(id);
-    const navigate = useNavigate();
-
-    const handleGoToEditUser = () => {
-        navigate(`/users/${id}/edit`, { replace: true });
-    };
 
     if (user) {
         return (
             <div className="container">
                 <div className="row gutters-sm">
                     <div className="col-md-4 mb-3">
-                        <UserCard
-                            name={user.name}
-                            profession={user.profession}
-                            rate={user.rate}
-                            goToEditUser={handleGoToEditUser}
-                        />
-                        <QualitiesCard qualities={user.qualities} />
-                        <MeetingsCard meetings={user.completedMeetings} />
+                        <UserCard user={user} />
+                        <QualitiesCard data={user.qualities} />
+                        <MeetingsCard value={user.completedMeetings} />
                     </div>
                     <div className="col-md-8">
-                        <CreateComments users={users} />
-                        <PublishedComments comments={comments} />
+                        <Comments />
                     </div>
                 </div>
             </div>

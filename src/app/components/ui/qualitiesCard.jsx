@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Quality from "./quality";
-import { useQualities } from "../../../../../hooks/useQualities";
+import Qualities from "./qualities";
+import { useQualities } from "../../hooks/useQualities";
 
-const QualitiesCard = ({ qualities }) => {
+const QualitiesCard = ({ data }) => {
     const { isLoading } = useQualities();
 
     if (!isLoading) {
@@ -15,9 +15,7 @@ const QualitiesCard = ({ qualities }) => {
                         <span>Qualities</span>
                     </h5>
                     <p className="card-text">
-                        {qualities.map((qual) => (
-                            <Quality key={qual} id={qual} />
-                        ))}
+                        <Qualities qualities={data} />
                     </p>
                 </div>
             </div>
@@ -26,7 +24,7 @@ const QualitiesCard = ({ qualities }) => {
 };
 
 QualitiesCard.propTypes = {
-    qualities: PropTypes.array
+    data: PropTypes.array
 };
 
 export default QualitiesCard;

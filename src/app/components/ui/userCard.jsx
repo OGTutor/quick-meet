@@ -1,19 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
-import { useProfessions } from "../../../../../hooks/useProfession";
+import { useProfessions } from "../../hooks/useProfession";
 
-const UserCard = ({ name, profession, rate, goToEditUser }) => {
+const UserCard = ({ user }) => {
     const { getProfession } = useProfessions();
-    const userProfession = getProfession(profession);
+    const userProfession = getProfession(user.profession);
+    const navigate = useNavigate();
 
-    if (userProfession) {
+    const handleGoToEditUser = () => {
+        navigate(`/users/${user._id}/edit`, { replace: true });
+    };
+
+    if (userProfession && user) {
         return (
             <div className="card mb-3">
                 <div className="card-body">
                     <button
                         className="position-absolute top-0 end-0 btn btn-light btn-sm"
-                        onClick={() => goToEditUser()}
+                        onClick={handleGoToEditUser}
                     >
                         <i className="bi bi-gear"></i>
                     </button>
@@ -30,7 +36,7 @@ const UserCard = ({ name, profession, rate, goToEditUser }) => {
                             height="150"
                         />
                         <div className="mt-3">
-                            <h4>{name}</h4>
+                            <h4>{user.name}</h4>
                             <p className="text-secondary mb-1">
                                 {userProfession.name}
                             </p>
@@ -43,7 +49,7 @@ const UserCard = ({ name, profession, rate, goToEditUser }) => {
                                     className="bi bi-caret-up text-secondary"
                                     role="button"
                                 ></i>
-                                <span className="ms-2">{rate}</span>
+                                <span className="ms-2">{user.rate}</span>
                             </div>
                         </div>
                     </div>
@@ -55,10 +61,7 @@ const UserCard = ({ name, profession, rate, goToEditUser }) => {
 };
 
 UserCard.propTypes = {
-    name: PropTypes.string,
-    profession: PropTypes.string,
-    rate: PropTypes.number,
-    goToEditUser: PropTypes.func
+    user: PropTypes.object
 };
 
 export default UserCard;

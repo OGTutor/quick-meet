@@ -8,7 +8,7 @@ import LoginForm from "./components/ui/loginForm";
 import RegisterForm from "./components/ui/registerForm";
 import Users from "./layouts/users";
 import UserPage from "./components/common/page/userPage/userPage";
-import EditUser from "./components/common/page/userPage/editUser/editUser";
+import EditUser from "./components/common/page/editUserPage/editUser";
 import NotFoundPage from "./layouts/notFoundPage";
 
 import Layout from "./components/ui/layout";

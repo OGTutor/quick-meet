@@ -20,12 +20,8 @@ const SelectField = ({
 
     const optionsArray =
         !Array.isArray(options) && typeof options === "object"
-            ? Object.keys(options).map((optionName) => ({
-                  name: options[optionName].name,
-                  value: options[optionName]._id
-              }))
+            ? Object.values(options)
             : options;
-
     return (
         <div className="mb-4">
             <label htmlFor={name} className="form-label">
@@ -34,7 +30,7 @@ const SelectField = ({
             <select
                 className={getInputClasses()}
                 id={name}
-                name="profession"
+                name={name}
                 value={value}
                 onChange={handleChange}
             >
@@ -43,7 +39,10 @@ const SelectField = ({
                 </option>
                 {optionsArray &&
                     optionsArray.map((option) => (
-                        <option key={option._id} value={option._id}>
+                        <option
+                            key={option.value || option._id}
+                            value={option.value || option}
+                        >
                             {option.name}
                         </option>
                     ))}
@@ -57,7 +56,7 @@ const SelectField = ({
 SelectField.propTypes = {
     label: PropTypes.string,
     name: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
     onChange: PropTypes.func,
     defaultOption: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import TextField from "../../../../common/form/textField";
-import SelectField from "../../../form/selectField";
-import RadioField from "../../../form/radioField";
-import MultiSelectField from "../../../form/multiSelectField";
-import { validator } from "../../../../../utils/validator";
-import { useProfessions } from "../../../../../hooks/useProfession";
-import { useQualities } from "../../../../../hooks/useQualities";
-import { useUser } from "../../../../../hooks/useUsers";
+import TextField from "../../form/textField";
+import SelectField from "../../form/selectField";
+import RadioField from "../../form/radioField";
+import MultiSelectField from "../../form/multiSelectField";
+import { validator } from "../../../../utils/validator";
+import { useProfessions } from "../../../../hooks/useProfession";
+import { useQualities } from "../../../../hooks/useQualities";
+import { useUser } from "../../../../hooks/useUsers";
 
 // import api from "../../../../../api";
 
@@ -77,7 +77,7 @@ const EditUser = () => {
 
     const transformData = (data) => {
         // const { qualities } = useQualities();
-        const updatedQualities = qualities.filter((q) => q._id === data[0]);
+        // const updatedQualities = qualities.filter((q) => q._id === data[0]);
         console.log(qualities);
 
         return data.map((qual) => ({
@@ -143,6 +143,13 @@ const EditUser = () => {
         return (
             <>
                 <div className="container mt-5">
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => handleBackToUserPage()}
+                    >
+                        <ion-icon name="caret-back-outline"></ion-icon>
+                        Back
+                    </button>
                     <div className="row">
                         <div className="col-md-6 offset-md-3 shadow p-4">
                             <h3 className="mb-4">Edit User</h3>
@@ -197,16 +204,6 @@ const EditUser = () => {
                                 </button>
                             </form>
                         </div>
-
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => handleBackToUserPage()}
-                        >
-                            <span className="small m-auto">
-                                <ion-icon name="caret-back-outline"></ion-icon>
-                            </span>
-                            User Page
-                        </button>
                     </div>
                 </div>
             </>
