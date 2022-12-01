@@ -140,7 +140,7 @@ const users = [
         sex: "male",
         profession: professions.cook,
         qualities: [qualities.handsome, qualities.buller],
-        completedMeetings: 17,
+        completedMeetings: 434,
         rate: 4.5,
         bookmark: false
     },
@@ -151,18 +151,28 @@ const users = [
         sex: "male",
         profession: professions.actor,
         qualities: [qualities.uncertain, qualities.strange],
-        completedMeetings: 434,
+        completedMeetings: 412,
         rate: 3.5,
         bookmark: false
     },
     {
         _id: "67rdca3eeb7f6fgeed47181r",
+        name: "Bradley Pitt",
+        email: "superstar@star.com",
+        sex: "male",
+        profession: professions.actor,
+        qualities: [qualities.handsome],
+        completedMeetings: 434,
+        rate: 5
+    },
+    {
+        _id: "67rdca3eeb7f6fgeed47181g",
         name: "Adolf Hitler",
         email: "adolf@14/88.com",
         sex: "male",
         profession: professions.painter,
         qualities: [qualities.handsome],
-        completedMeetings: 434,
+        completedMeetings: 508,
         rate: 5,
         bookmark: false
     }
