@@ -18,12 +18,6 @@ export const ProfessionProvider = ({ children }) => {
     useEffect(() => {
         getProfessionsList();
     }, []);
-    useEffect(() => {
-        if (error !== null) {
-            toast.error(error);
-            setError(null);
-        }
-    }, [error]);
 
     async function getProfessionsList() {
         try {
@@ -44,6 +38,12 @@ export const ProfessionProvider = ({ children }) => {
         setError(message);
         setLoading(false);
     }
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
 
     return (
         <ProfessionContext.Provider

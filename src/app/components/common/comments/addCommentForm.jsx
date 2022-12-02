@@ -47,12 +47,7 @@ const AddCommentForm = ({ onSubmit }) => {
         setData(initialData);
         setErrors({});
     };
-    const arrayOfUsers =
-        users &&
-        Object.keys(users).map((userId) => ({
-            name: users[userId].name,
-            value: users[userId]._id
-        }));
+    console.log(data);
 
     return (
         <div>
@@ -60,7 +55,7 @@ const AddCommentForm = ({ onSubmit }) => {
             <form onSubmit={handleSubmit}>
                 <SelectField
                     onChange={handleChange}
-                    options={arrayOfUsers}
+                    options={users}
                     name="userId"
                     value={data.userId}
                     defaultOption="Choose user..."

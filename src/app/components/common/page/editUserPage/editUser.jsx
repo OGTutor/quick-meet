@@ -78,7 +78,8 @@ const EditUser = () => {
     const transformData = (data) => {
         // const { qualities } = useQualities();
         // const updatedQualities = qualities.filter((q) => q._id === data[0]);
-        console.log(qualities);
+        // const qualitiesArray = data.map((q) => getQuality(q));
+        // console.log(qualitiesArray);
 
         return data.map((qual) => ({
             label: qual.name,
@@ -138,8 +139,16 @@ const EditUser = () => {
     };
 
     const isValid = Object.keys(errors).length === 0;
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id
+    }));
 
-    if (!isLoading && Object.keys(professions).length > 0) {
+    if (
+        !isLoading &&
+        Object.keys(professions).length > 0 &&
+        qualities.length > 0
+    ) {
         return (
             <>
                 <div className="container mt-5">
@@ -173,7 +182,7 @@ const EditUser = () => {
                                     value={data.profession}
                                     onChange={handleChange}
                                     defaultOption="Choose..."
-                                    name="professions"
+                                    name="profession"
                                     options={professions}
                                     error={errors.profession}
                                 />
@@ -189,7 +198,7 @@ const EditUser = () => {
                                     label="Choose gender"
                                 />
                                 <MultiSelectField
-                                    options={qualities}
+                                    options={qualitiesList}
                                     onChange={handleChange}
                                     defaultValue={data.qualities}
                                     name="qualities"

@@ -15,44 +15,54 @@ import Layout from "./components/ui/layout";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualitiesProvider } from "./hooks/useQualities";
 import { UserProvider } from "./hooks/useUsers";
+import AuthProvider from "./hooks/useAuth";
 
 const App = () => {
     return (
         <>
-            <UserProvider>
-                <ProfessionProvider>
-                    <QualitiesProvider>
-                        <Routes>
-                            <Route path="/" element={<Layout />}>
-                                <Route index element={<Main />} />
-                                <Route
-                                    path="authorization"
-                                    element={<Authorization />}
-                                />
-                                <Route
-                                    path="authorization/:login"
-                                    element={<LoginForm />}
-                                />
-                                <Route
-                                    path="authorization/:login/register"
-                                    element={<RegisterForm />}
-                                />
-                                <Route path="users" element={<Users />} />
-                                <Route
-                                    path="users/:id"
-                                    element={<UserPage />}
-                                />
-                                <Route
-                                    path="users/:id/edit"
-                                    element={<EditUser />}
-                                />
-                                <Route path="404" element={<NotFoundPage />} />
-                                <Route path="*" element={<NotFoundPage />} />
-                            </Route>
-                        </Routes>
-                    </QualitiesProvider>
-                </ProfessionProvider>
-            </UserProvider>
+            <AuthProvider>
+                <UserProvider>
+                    <ProfessionProvider>
+                        <QualitiesProvider>
+                            <Routes>
+                                <Route path="/" element={<Layout />}>
+                                    <Route index element={<Main />} />
+                                    <Route
+                                        path="authorization"
+                                        element={<Authorization />}
+                                    />
+                                    <Route
+                                        path="authorization/:login"
+                                        element={<LoginForm />}
+                                    />
+                                    <Route
+                                        path="authorization/:login/register"
+                                        element={<RegisterForm />}
+                                    />
+                                    <Route path="users" element={<Users />} />
+                                    <Route
+                                        path="users/:id"
+                                        element={<UserPage />}
+                                    />
+                                    <Route
+                                        path="users/:id/edit"
+                                        element={<EditUser />}
+                                    />
+                                    <Route
+                                        path="404"
+                                        element={<NotFoundPage />}
+                                    />
+                                    <Route
+                                        path="*"
+                                        element={<NotFoundPage />}
+                                    />
+                                </Route>
+                            </Routes>
+                        </QualitiesProvider>
+                    </ProfessionProvider>
+                </UserProvider>
+            </AuthProvider>
+
             <ToastContainer />
         </>
     );

@@ -18,12 +18,6 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         getUsers();
     }, []);
-    useEffect(() => {
-        if (error !== null) {
-            toast.error(error);
-            setError(null);
-        }
-    }, [error]);
 
     async function getUsers() {
         try {
@@ -60,6 +54,12 @@ export const UserProvider = ({ children }) => {
         setError(message);
         setLoading(false);
     }
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
 
     return (
         <UserContext.Provider value={{ users, getUser, updateUser }}>

@@ -18,12 +18,6 @@ export const QualitiesProvider = ({ children }) => {
     useEffect(() => {
         getQualitiesList();
     }, []);
-    useEffect(() => {
-        if (error !== null) {
-            toast.error(error);
-            setError(null);
-        }
-    }, [error]);
 
     async function getQualitiesList() {
         try {
@@ -44,6 +38,12 @@ export const QualitiesProvider = ({ children }) => {
         setError(message);
         setLoading(false);
     }
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
 
     return (
         <QualitiesContext.Provider value={{ isLoading, qualities, getQuality }}>
