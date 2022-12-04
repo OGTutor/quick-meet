@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -13,12 +14,15 @@ const LoginForm = () => {
         stayOn: false
     });
     const [errors, setErrors] = useState({});
+    const [enterError, setEnterError] = useState(null);
+    const { signIn } = useAuth();
 
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
+        setEnterError(null);
     };
 
     const handleBackToRegister = () => {
@@ -27,22 +31,10 @@ const LoginForm = () => {
 
     const validatorConfig = {
         email: {
-            isRequired: { message: "Email is required!" },
-            isEmail: { message: "Email entered incorrectly!" }
+            isRequired: { message: "Email is required!" }
         },
         password: {
-            isRequired: { message: "Password is required!" },
-            isCapitalSymbol: {
-                message:
-                    "The password must contain at least one capital letter!"
-            },
-            isContainDigit: {
-                message: "The password must contain at least one number!"
-            },
-            min: {
-                message: "The password must contain at least 8 characters!",
-                value: 8
-            }
+            isRequired: { message: "Password is required!" }
         }
     };
 
@@ -58,11 +50,16 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const isValid = validate();
-
         if (!isValid) return null;
+        try {
+            await signIn(data);
+            navigate("/");
+        } catch (error) {
+            setEnterError(error.message);
+        }
     };
 
     return (
@@ -94,9 +91,12 @@ const LoginForm = () => {
                             >
                                 Remain in the system
                             </CheckBoxField>
+                            {enterError && (
+                                <p className="text-danger">{enterError}</p>
+                            )}
                             <button
                                 type="submit"
-                                disabled={!isValid}
+                                disabled={!isValid || enterError}
                                 className="btn btn-outline-dark w-100 mx-auto"
                             >
                                 Submit
