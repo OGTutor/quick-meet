@@ -13,25 +13,26 @@ import { useAuth } from "../../hooks/useAuth";
 
 const RegisterForm = () => {
     const navigate = useNavigate();
-    const { professions } = useProfessions();
-    const { qualities } = useQualities();
-    const qualitiesList = qualities.map((q) => ({
-        label: q.name,
-        value: q._id
-    }));
     const [data, setData] = useState({
         email: "",
         password: "",
         profession: "",
         sex: "male",
+        name: "",
         qualities: [],
         license: false
     });
-    const [errors, setErrors] = useState({});
     const { signUp } = useAuth();
+    const { qualities } = useQualities();
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id
+    }));
+    const { professions } = useProfessions();
+    const [errors, setErrors] = useState({});
 
     const handleBackToLogin = () => {
-        navigate("/authorization/login");
+        navigate("/login");
     };
 
     const handleChange = (target) => {
@@ -45,6 +46,13 @@ const RegisterForm = () => {
         email: {
             isRequired: { message: "Email is required!" },
             isEmail: { message: "Email entered incorrectly!" }
+        },
+        name: {
+            isRequired: { message: "Name is required!" },
+            min: {
+                message: "Name must contain at least 3 characters!",
+                value: 3
+            }
         },
         password: {
             isRequired: { message: "Password is required!" },
@@ -104,6 +112,13 @@ const RegisterForm = () => {
                     <div className="col-md-6 offset-md-3 shadow p-4">
                         <h3 className="mb-4">Register</h3>
                         <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Name"
+                                name="name"
+                                value={data.name}
+                                onChange={handleChange}
+                                error={errors.name}
+                            />
                             <TextField
                                 label="Email"
                                 name="email"

@@ -47,7 +47,6 @@ const AddCommentForm = ({ onSubmit }) => {
         setData(initialData);
         setErrors({});
     };
-    console.log(data);
 
     return (
         <div>

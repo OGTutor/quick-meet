@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import Main from "./layouts/main";
-import Authorization from "./layouts/authorization";
 import LoginForm from "./components/ui/loginForm";
 import RegisterForm from "./components/ui/registerForm";
 import Users from "./layouts/users";
@@ -11,10 +10,11 @@ import UserPage from "./components/common/page/userPage/userPage";
 import EditUser from "./components/common/page/editUserPage/editUser";
 import NotFoundPage from "./layouts/notFoundPage";
 
-import Layout from "./components/ui/layout";
+import NavBar from "./components/ui/navBar";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualitiesProvider } from "./hooks/useQualities";
 import { UserProvider } from "./hooks/useUsers";
+import ProtectedRoute from "./components/common/protectedRoute";
 import AuthProvider from "./hooks/useAuth";
 
 const App = () => {
@@ -25,28 +25,39 @@ const App = () => {
                     <ProfessionProvider>
                         <QualitiesProvider>
                             <Routes>
-                                <Route path="/" element={<Layout />}>
+                                <Route path="/" element={<NavBar />}>
                                     <Route index element={<Main />} />
                                     <Route
-                                        path="authorization"
-                                        element={<Authorization />}
-                                    />
-                                    <Route
-                                        path="authorization/:login"
+                                        path="/login"
                                         element={<LoginForm />}
                                     />
                                     <Route
-                                        path="authorization/:login/register"
+                                        path="/register"
                                         element={<RegisterForm />}
                                     />
-                                    <Route path="users" element={<Users />} />
+                                    <Route
+                                        path="users"
+                                        element={
+                                            <ProtectedRoute>
+                                                <Users />
+                                            </ProtectedRoute>
+                                        }
+                                    />
                                     <Route
                                         path="users/:id"
-                                        element={<UserPage />}
+                                        element={
+                                            <ProtectedRoute>
+                                                <UserPage />
+                                            </ProtectedRoute>
+                                        }
                                     />
                                     <Route
                                         path="users/:id/edit"
-                                        element={<EditUser />}
+                                        element={
+                                            <ProtectedRoute>
+                                                <EditUser />
+                                            </ProtectedRoute>
+                                        }
                                     />
                                     <Route
                                         path="404"

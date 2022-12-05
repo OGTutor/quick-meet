@@ -26,7 +26,7 @@ const LoginForm = () => {
     };
 
     const handleBackToRegister = () => {
-        navigate(`/authorization/:login/register`);
+        navigate(`/register`);
     };
 
     const validatorConfig = {

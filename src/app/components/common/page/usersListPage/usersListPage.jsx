@@ -112,7 +112,7 @@ const UsersListPage = () => {
                             onItemSelect={handleProfessionSelect}
                         />
                         <button
-                            className="btn btn-outline-dark mt-2"
+                            className="btn btn-outline-dark shadow mt-2"
                             onClick={clearFilter}
                         >
                             Clear
