@@ -8,6 +8,7 @@ import RegisterForm from "./components/ui/registerForm";
 import Users from "./layouts/users";
 import UserPage from "./components/common/page/userPage/userPage";
 import EditUser from "./components/common/page/editUserPage/editUser";
+import LogOut from "./layouts/logOut";
 import NotFoundPage from "./layouts/notFoundPage";
 
 import NavBar from "./components/ui/navBar";
@@ -58,6 +59,10 @@ const App = () => {
                                                 <EditUser />
                                             </ProtectedRoute>
                                         }
+                                    />
+                                    <Route
+                                        path="/logout"
+                                        element={<LogOut />}
                                     />
                                     <Route
                                         path="404"

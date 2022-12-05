@@ -6,11 +6,12 @@ import UserCard from "../../../ui/userCard";
 import QualitiesCard from "../../../ui/qualitiesCard";
 import MeetingsCard from "../../../ui/meetingsCard";
 import Comments from "../../../ui/comments";
+import { CommentsProvider } from "../../../../hooks/useComments";
 
 const UserPage = () => {
-    const { getUser } = useUser();
+    const { getUserById } = useUser();
     const { id } = useParams();
-    const user = getUser(id);
+    const user = getUserById(id);
 
     if (user) {
         return (
@@ -22,7 +23,9 @@ const UserPage = () => {
                         <MeetingsCard value={user.completedMeetings} />
                     </div>
                     <div className="col-md-8">
-                        <Comments />
+                        <CommentsProvider>
+                            <Comments />
+                        </CommentsProvider>
                     </div>
                 </div>
             </div>

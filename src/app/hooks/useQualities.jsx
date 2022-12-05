@@ -21,7 +21,7 @@ export const QualitiesProvider = ({ children }) => {
 
     async function getQualitiesList() {
         try {
-            const { content } = await qualitiesService.get();
+            const { content } = await qualitiesService.fetchAll();
             setQualities(content);
             setLoading(false);
         } catch (error) {

@@ -10,13 +10,11 @@ import { useProfessions } from "../../../../hooks/useProfession";
 import { useQualities } from "../../../../hooks/useQualities";
 import { useUser } from "../../../../hooks/useUsers";
 
-// import api from "../../../../../api";
-
 const EditUser = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { getUser, updateUser } = useUser();
-    const user = getUser(id);
+    const { getUserById, updateUser } = useUser();
+    const user = getUserById(id);
 
     const { qualities } = useQualities();
     const { professions } = useProfessions();

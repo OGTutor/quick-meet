@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
 import userService from "../services/user.service";
@@ -18,9 +19,16 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState();
     const [error, setError] = useState(null);
+    const [isLoading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    function logOut() {
+        localStorageService.removeAuthData();
+        setCurrentUser(null);
+        navigate("/");
     }
 
     async function signUp({ email, password, ...rest }) {
@@ -36,6 +44,11 @@ const AuthProvider = ({ children }) => {
                 email,
                 rate: randomInt(1, 5),
                 completedMeetings: randomInt(0, 200),
+                image: `https://avatars.dicebear.com/api/avataaars/${(
+                    Math.random() + 1
+                )
+                    .toString(36)
+                    .substring(7)}.svg`,
                 ...rest
             });
         } catch (error) {
@@ -62,7 +75,7 @@ const AuthProvider = ({ children }) => {
                 }
             );
             localStorageService.setTokens(data);
-            getUserData();
+            await getUserData();
         } catch (error) {
             errorCatcher(error);
             const { code, message } = error.response.data.error;
@@ -102,11 +115,15 @@ const AuthProvider = ({ children }) => {
             setCurrentUser(content);
         } catch (error) {
             errorCatcher(error);
+        } finally {
+            setLoading(false);
         }
     }
     useEffect(() => {
         if (localStorageService.getAccessToken()) {
             getUserData();
+        } else {
+            setLoading(false);
         }
     }, []);
     useEffect(() => {
@@ -117,8 +134,8 @@ const AuthProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <AuthContext.Provider value={{ signUp, signIn, currentUser }}>
-            {children}
+        <AuthContext.Provider value={{ signUp, signIn, logOut, currentUser }}>
+            {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );
 };

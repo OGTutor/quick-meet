@@ -1,21 +1,18 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import SelectField from "../form/selectField";
 import TextAreaField from "../form/textAreaField";
 import { validator } from "../../../utils/validator";
 import { useUser } from "../../../hooks/useUsers";
 
-const initialData = { userId: "", content: "" };
-
 const AddCommentForm = ({ onSubmit }) => {
     const { users } = useUser();
-    const [data, setData] = useState(initialData);
+    const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
 
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
-            [target.name]: [target.value]
+            [target.name]: target.value
         }));
     };
     const handleSubmit = (e) => {
@@ -27,11 +24,6 @@ const AddCommentForm = ({ onSubmit }) => {
     };
 
     const validatorConfig = {
-        userId: {
-            isRequired: {
-                message: "Choose on whose behalf you want to leave a comment"
-            }
-        },
         content: {
             isRequired: { message: "Message cannot be empty" }
         }
@@ -44,7 +36,7 @@ const AddCommentForm = ({ onSubmit }) => {
         return Object.keys(errors).length === 0;
     };
     const clearForm = () => {
-        setData(initialData);
+        setData({});
         setErrors({});
     };
 
@@ -52,16 +44,8 @@ const AddCommentForm = ({ onSubmit }) => {
         <div>
             <h2>New comment</h2>
             <form onSubmit={handleSubmit}>
-                <SelectField
-                    onChange={handleChange}
-                    options={users}
-                    name="userId"
-                    value={data.userId}
-                    defaultOption="Choose user..."
-                    error={errors.userId}
-                />
                 <TextAreaField
-                    value={data.content}
+                    value={data.content || ""}
                     onChange={handleChange}
                     name="content"
                     label="Message"

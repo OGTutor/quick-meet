@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const { state } = useLocation();
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -56,8 +57,14 @@ const LoginForm = () => {
         if (!isValid) return null;
         try {
             await signIn(data);
-            navigate("/");
+            navigate(state.from.pathname ? state.from.pathname : "/");
         } catch (error) {
+            if (
+                error.message ===
+                "Cannot read properties of null (reading 'from')"
+            ) {
+                navigate(`/`);
+            }
             setEnterError(error.message);
         }
     };

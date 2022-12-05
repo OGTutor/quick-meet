@@ -1,13 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 import { useProfessions } from "../../hooks/useProfession";
 
 const UserCard = ({ user }) => {
+    const navigate = useNavigate();
+    const { currentUser } = useAuth();
     const { getProfession } = useProfessions();
     const userProfession = getProfession(user.profession);
-    const navigate = useNavigate();
 
     const handleGoToEditUser = () => {
         navigate(`/users/${user._id}/edit`, { replace: true });
@@ -15,22 +17,20 @@ const UserCard = ({ user }) => {
 
     if (userProfession && user) {
         return (
-            <div className="card mb-3">
+            <div className="card mb-3 shadow">
                 <div className="card-body">
-                    <button
-                        className="position-absolute top-0 end-0 btn btn-light btn-sm"
-                        onClick={handleGoToEditUser}
-                    >
-                        <i className="bi bi-gear"></i>
-                    </button>
+                    {currentUser._id === user._id && (
+                        <button
+                            className="position-absolute top-0 end-0 btn btn-light btn-sm"
+                            onClick={handleGoToEditUser}
+                        >
+                            <i className="bi bi-gear"></i>
+                        </button>
+                    )}
                     <div className="d-flex flex-column align-items-center text-center position-relative">
                         <img
-                            src={`https://avatars.dicebear.com/api/avataaars/${(
-                                Math.random() + 1
-                            )
-                                .toString(36)
-                                .substring(7)}.svg`}
-                            className="rounded-circle shadow-1-strong me-3"
+                            src={user.image}
+                            className="rounded-circle shadow-1-strong shadow"
                             alt="avatar"
                             width="150"
                             height="150"

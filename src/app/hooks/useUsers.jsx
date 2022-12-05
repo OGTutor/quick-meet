@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    const getUser = (id) => {
+    const getUserById = (id) => {
         return users.find((u) => u._id === id);
     };
 
@@ -62,7 +62,7 @@ export const UserProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <UserContext.Provider value={{ users, getUser, updateUser }}>
+        <UserContext.Provider value={{ users, getUserById, updateUser }}>
             {!isLoading ? children : "Loading..."}
         </UserContext.Provider>
     );
