@@ -8,14 +8,6 @@ const userService = {
         const { data } = await httpService.get(userEndPoint);
         return data;
     },
-    // getById: async (id) => {
-    //     const { data } = await httpService.get(userEndPoint + id);
-    //     return data;
-    // },
-    // update: async (id, content) => {
-    //     const { data } = await httpService.put(userEndPoint + id, content);
-    //     return data;
-    // },
     create: async (payload) => {
         const { data } = await httpService.put(
             userEndPoint + payload._id,
@@ -26,6 +18,13 @@ const userService = {
     getCurrentUser: async () => {
         const { data } = await httpService.get(
             userEndPoint + localStorageService.getUserId()
+        );
+        return data;
+    },
+    update: async (payload) => {
+        const { data } = await httpService.patch(
+            userEndPoint + localStorageService.getUserId(),
+            payload
         );
         return data;
     }

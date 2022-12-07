@@ -31,7 +31,10 @@ const UserTable = ({
             name: "Job",
             component: (user) => <Profession id={user.profession} />
         },
-        completedMeetings: { path: "completedMeetings", name: "Meets, times" },
+        completedMeetings: {
+            path: "completedMeetings",
+            name: "Meetings"
+        },
         rate: {
             path: "rate",
             name: "Rating"

@@ -12,7 +12,7 @@ const UserCard = ({ user }) => {
     const userProfession = getProfession(user.profession);
 
     const handleGoToEditUser = () => {
-        navigate(`/users/${user._id}/edit`, { replace: true });
+        navigate(`/users/${currentUser._id}/edit`, { replace: false });
     };
 
     if (userProfession && user) {

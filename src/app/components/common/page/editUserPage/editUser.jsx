@@ -1,112 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import { useProfessions } from "../../../../hooks/useProfession";
+import { useQualities } from "../../../../hooks/useQualities";
+import { useAuth } from "../../../../hooks/useAuth";
+
+import { validator } from "../../../../utils/validator";
 
 import TextField from "../../form/textField";
 import SelectField from "../../form/selectField";
 import RadioField from "../../form/radioField";
 import MultiSelectField from "../../form/multiSelectField";
-import { validator } from "../../../../utils/validator";
-import { useProfessions } from "../../../../hooks/useProfession";
-import { useQualities } from "../../../../hooks/useQualities";
-import { useUser } from "../../../../hooks/useUsers";
+import BackHistoryButton from "../../backButton";
 
 const EditUser = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
-    const { getUserById, updateUser } = useUser();
-    const user = getUserById(id);
-
-    const { qualities } = useQualities();
-    const { professions } = useProfessions();
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
-
-    const handleBackToUserPage = () => {
-        navigate(`/users/${id}`, { replace: true });
-    };
-
-    // const [allProfessions, setAllProfession] = useState([]);
-    // const [allQualities, setAllQualities] = useState({});
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState();
+    const { currentUser, updateUserData } = useAuth();
+    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id
+    }));
+    const { professions, isLoading: professionLoading } = useProfessions();
     const [errors, setErrors] = useState({});
-    const getProfessionById = (id) => {
-        for (const prof in professions) {
-            const profData = professions[prof];
-            if (profData._id === id) return profData;
-        }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        if (!isValid) return null;
+        await updateUserData({
+            ...data,
+            qualities: data.qualities.map((q) => q.value)
+        });
+        navigate(`/users/${currentUser._id}`);
     };
-    const getQualities = (elements) => {
+
+    function getQualitiesListByIds(qualitiesIds) {
         const qualitiesArray = [];
-        for (const elem of elements) {
-            for (const quality in qualities) {
-                if (elem.value === qualities[quality]._id) {
-                    qualitiesArray.push(qualities[quality]);
+        for (const id of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === id) {
+                    qualitiesArray.push(quality);
+                    break;
                 }
             }
         }
         return qualitiesArray;
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const isValid = validate();
-        if (!isValid) return null;
-
-        const { profession, qualities } = data;
-        updateUser(id, {
-            ...data,
-            profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
-        });
-        // api.users
-        //     .update(id, {
-        //         ...data,
-        //         profession: getProfessionById(profession),
-        //         qualities: getQualities(qualities)
-        //     })
-        //     .then((data) => navigate(`/users/${data._id}`));
-    };
-
+    }
     const transformData = (data) => {
-        // const { qualities } = useQualities();
-        // const updatedQualities = qualities.filter((q) => q._id === data[0]);
-        // const qualitiesArray = data.map((q) => getQuality(q));
-        // console.log(qualitiesArray);
-
-        return data.map((qual) => ({
-            label: qual.name,
-            value: qual._id
+        const result = getQualitiesListByIds(data).map((q) => ({
+            label: q.name,
+            value: q._id
         }));
+        return result;
     };
 
     useEffect(() => {
-        setIsLoading(true);
-        setData((prevState) => ({
-            ...prevState,
-            ...user,
-            qualities: transformData(user.qualities),
-            profession: user.profession
-        }));
-        // api.users.getById(id).then(({ profession, qualities, ...data }) =>
-        //     setData((prevState) => ({
-        //         ...prevState,
-        //         ...data,
-        //         qualities: transformData(qualities),
-        //         profession: profession._id
-        //     }))
-        // );
-        // api.professions.fetchAll().then((data) => setProfession(data));
-        // api.qualities.fetchAll().then((data) => setQualities(data));
-    }, []);
-
+        if (!professionLoading && !qualitiesLoading && currentUser && !data) {
+            setData({
+                ...currentUser,
+                qualities: transformData(currentUser.qualities)
+            });
+        }
+    }, [currentUser, professionLoading, qualitiesLoading, data]);
     useEffect(() => {
-        if (data._id) setIsLoading(false);
+        if (data && isLoading) {
+            setLoading(false);
+        }
+    }, [data]);
+    useEffect(() => {
+        validate();
     }, [data]);
 
     const validatorConfig = {
@@ -118,10 +83,6 @@ const EditUser = () => {
             isRequired: { message: "User`s name is required!" }
         }
     };
-
-    useEffect(() => {
-        validate();
-    }, [data]);
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -135,30 +96,15 @@ const EditUser = () => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-
     const isValid = Object.keys(errors).length === 0;
-    const qualitiesList = qualities.map((q) => ({
-        label: q.name,
-        value: q._id
-    }));
 
-    if (
-        !isLoading &&
-        Object.keys(professions).length > 0 &&
-        qualities.length > 0
-    ) {
-        return (
-            <>
-                <div className="container mt-5">
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => handleBackToUserPage()}
-                    >
-                        <ion-icon name="caret-back-outline"></ion-icon>
-                        Back
-                    </button>
-                    <div className="row">
-                        <div className="col-md-6 offset-md-3 shadow p-4">
+    return (
+        <div className="container mt-5">
+            <BackHistoryButton />
+            <div className="row">
+                <div className="col-md-6 offset-md-3 shadow p-4">
+                    {!isLoading && Object.keys(professions).length > 0 ? (
+                        <>
                             <h3 className="mb-4">Edit User</h3>
                             <form onSubmit={handleSubmit}>
                                 <TextField
@@ -210,18 +156,16 @@ const EditUser = () => {
                                     Refresh
                                 </button>
                             </form>
+                        </>
+                    ) : (
+                        <div className="container mt-5">
+                            <div className="row">
+                                <div className="col-md-6 offset-md-3 shadow p-4">
+                                    <h1>Loading...</h1>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </>
-        );
-    }
-
-    return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-6 offset-md-3 shadow p-4">
-                    <h1>Loading...</h1>
+                    )}
                 </div>
             </div>
         </div>

@@ -17,7 +17,7 @@ const Comment = ({
     const user = getUserById(userId);
 
     return (
-        <div className="bg-light card-body mb-3">
+        <div className="bg-light card-body mb-3 shadow">
             <div className="row">
                 <div className="col">
                     <div className="d-flex flex-start">
