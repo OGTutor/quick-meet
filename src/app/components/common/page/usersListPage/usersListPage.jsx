@@ -8,18 +8,29 @@ import UserTable from "../../../ui/usersTable";
 
 import _ from "lodash";
 import { useUser } from "../../../../hooks/useUsers";
-import { useProfessions } from "../../../../hooks/useProfession";
 import { useAuth } from "../../../../hooks/useAuth";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus,
+    loadProfessionsList
+} from "../../../../store/professions";
+import { useDispatch, useSelector } from "react-redux";
 
 const UsersListPage = () => {
+    const dispatch = useDispatch();
     const { users } = useUser();
     const { currentUser } = useAuth();
-    const { professions, isLoading: professionsLoading } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const pageSize = 4;
+
+    useEffect(() => {
+        dispatch(loadProfessionsList());
+    }, []);
 
     const handleDelete = (userId) => {
         // setUsers(users.filter((user) => user._id !== userId));

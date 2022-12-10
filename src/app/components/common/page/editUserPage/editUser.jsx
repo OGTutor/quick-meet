@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useProfessions } from "../../../../hooks/useProfession";
-import { useQualities } from "../../../../hooks/useQualities";
 import { useAuth } from "../../../../hooks/useAuth";
 
 import { validator } from "../../../../utils/validator";
@@ -12,18 +10,29 @@ import SelectField from "../../form/selectField";
 import RadioField from "../../form/radioField";
 import MultiSelectField from "../../form/multiSelectField";
 import BackHistoryButton from "../../backButton";
+import { useSelector } from "react-redux";
+import {
+    getQualities,
+    getQualitiesLoadingStatus
+} from "../../../../store/qualities";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../../store/professions";
 
 const EditUser = () => {
     const navigate = useNavigate();
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState();
     const { currentUser, updateUserData } = useAuth();
-    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id
     }));
-    const { professions, isLoading: professionLoading } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (e) => {
@@ -58,13 +67,13 @@ const EditUser = () => {
     };
 
     useEffect(() => {
-        if (!professionLoading && !qualitiesLoading && currentUser && !data) {
+        if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
             setData({
                 ...currentUser,
                 qualities: transformData(currentUser.qualities)
             });
         }
-    }, [currentUser, professionLoading, qualitiesLoading, data]);
+    }, [currentUser, professionsLoading, qualitiesLoading, data]);
     useEffect(() => {
         if (data && isLoading) {
             setLoading(false);

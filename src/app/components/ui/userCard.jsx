@@ -3,19 +3,23 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
-import { useProfessions } from "../../hooks/useProfession";
+import { useSelector } from "react-redux";
+import {
+    getProfessionById,
+    getProfessionsLoadingStatus
+} from "../../store/professions";
 
 const UserCard = ({ user }) => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
-    const { getProfession } = useProfessions();
-    const userProfession = getProfession(user.profession);
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
+    const userProfession = useSelector(getProfessionById(user.profession));
 
     const handleGoToEditUser = () => {
         navigate(`/users/${currentUser._id}/edit`, { replace: false });
     };
 
-    if (userProfession && user) {
+    if (!professionsLoading && user) {
         return (
             <div className="card mb-3 shadow">
                 <div className="card-body">

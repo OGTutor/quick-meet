@@ -7,9 +7,10 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
-import { useQualities } from "../../hooks/useQualities";
-import { useProfessions } from "../../hooks/useProfession";
 import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../store/qualities";
+import { getProfessions } from "../../store/professions";
 
 const RegisterForm = () => {
     const navigate = useNavigate();
@@ -23,12 +24,12 @@ const RegisterForm = () => {
         license: false
     });
     const { signUp } = useAuth();
-    const { qualities } = useQualities();
+    const qualities = useSelector(getQualities());
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id
     }));
-    const { professions } = useProfessions();
+    const professions = useSelector(getProfessions());
     const [errors, setErrors] = useState({});
 
     const handleBackToLogin = () => {
