@@ -4,7 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
-import { useAuth } from "../../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { signIn } from "../../store/users";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const LoginForm = () => {
     });
     const [errors, setErrors] = useState({});
     const [enterError, setEnterError] = useState(null);
-    const { signIn } = useAuth();
+    const dispatch = useDispatch();
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -51,22 +52,18 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
-        try {
-            await signIn(data);
-            navigate(state.from.pathname ? state.from.pathname : "/");
-        } catch (error) {
-            if (
-                error.message ===
-                "Cannot read properties of null (reading 'from')"
-            ) {
-                navigate(`/`);
-            }
-            setEnterError(error.message);
-        }
+        // const redirect = state.from.pathname ? state.from.pathname : "/";
+        dispatch(signIn({ payload: data, navigate }));
+        // if (
+        //     error.message ===
+        //     "Cannot read properties of null (reading 'from')"
+        // ) {
+        //     navigate(`/`);
+        // }
     };
 
     return (

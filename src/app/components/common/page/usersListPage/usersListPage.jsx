@@ -7,18 +7,16 @@ import SearchStatus from "../../../ui/searchStatus";
 import UserTable from "../../../ui/usersTable";
 
 import _ from "lodash";
-import { useUser } from "../../../../hooks/useUsers";
 import { useAuth } from "../../../../hooks/useAuth";
 import {
     getProfessions,
-    getProfessionsLoadingStatus,
-    loadProfessionsList
+    getProfessionsLoadingStatus
 } from "../../../../store/professions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { getUsersList } from "../../../../store/users";
 
 const UsersListPage = () => {
-    const dispatch = useDispatch();
-    const { users } = useUser();
+    const users = useSelector(getUsersList());
     const { currentUser } = useAuth();
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -27,10 +25,6 @@ const UsersListPage = () => {
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const pageSize = 4;
-
-    useEffect(() => {
-        dispatch(loadProfessionsList());
-    }, []);
 
     const handleDelete = (userId) => {
         // setUsers(users.filter((user) => user._id !== userId));

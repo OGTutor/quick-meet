@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import TextAreaField from "../form/textAreaField";
 import { validator } from "../../../utils/validator";
-import { useUser } from "../../../hooks/useUsers";
 
 const AddCommentForm = ({ onSubmit }) => {
-    const { users } = useUser();
     const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
 
