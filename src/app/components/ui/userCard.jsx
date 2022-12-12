@@ -1,29 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 
 import { useSelector } from "react-redux";
 import {
     getProfessionById,
     getProfessionsLoadingStatus
 } from "../../store/professions";
+import { getCurrentUserId } from "../../store/users";
 
 const UserCard = ({ user }) => {
     const navigate = useNavigate();
-    const { currentUser } = useAuth();
-    const professionsLoading = useSelector(getProfessionsLoadingStatus());
+    const currentUserId = useSelector(getCurrentUserId());
     const userProfession = useSelector(getProfessionById(user.profession));
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
 
     const handleGoToEditUser = () => {
-        navigate(`/users/${currentUser._id}/edit`, { replace: false });
+        navigate(`/users/${currentUserId}/edit`, { replace: false });
     };
 
     if (!professionsLoading && user) {
         return (
             <div className="card mb-3 shadow">
                 <div className="card-body">
-                    {currentUser._id === user._id && (
+                    {currentUserId === user._id && (
                         <button
                             className="position-absolute top-0 end-0 btn btn-light btn-sm"
                             onClick={handleGoToEditUser}

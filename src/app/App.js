@@ -6,26 +6,24 @@ import Main from "./layouts/main";
 import LoginForm from "./components/ui/loginForm";
 import RegisterForm from "./components/ui/registerForm";
 import Users from "./layouts/users";
-import UserPage from "./components/common/page/userPage/userPage";
-import EditUser from "./components/common/page/editUserPage/editUser";
+import UserPage from "./components/page/userPage/userPage";
+import EditUser from "./components/page/editUserPage/editUser";
 import LogOut from "./layouts/logOut";
 import NotFoundPage from "./layouts/notFoundPage";
 
 import NavBar from "./components/ui/navBar";
 import ProtectedRoute from "./components/common/protectedRoute";
 import AuthProvider from "./hooks/useAuth";
+import AuthLoader from "./components/ui/hoc/authLoader";
 import { useDispatch } from "react-redux";
-import { loadQualitiesList } from "./store/qualities";
 import { loadProfessionsList } from "./store/professions";
-import { loadUsersList } from "./store/users";
+import { loadQualitiesList } from "./store/qualities";
 
 const App = () => {
     const dispatch = useDispatch();
-
     useEffect(() => {
         dispatch(loadQualitiesList());
         dispatch(loadProfessionsList());
-        dispatch(loadUsersList());
     }, []);
 
     return (

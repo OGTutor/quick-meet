@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import UserCard from "../../../ui/userCard";
-import QualitiesCard from "../../../ui/qualitiesCard";
-import MeetingsCard from "../../../ui/meetingsCard";
-import Comments from "../../../ui/comments";
-import { CommentsProvider } from "../../../../hooks/useComments";
+import UserCard from "../../ui/userCard";
+import QualitiesCard from "../../ui/qualitiesCard";
+import MeetingsCard from "../../ui/meetingsCard";
+import Comments from "../../ui/comments";
+import { CommentsProvider } from "../../../hooks/useComments";
 import { useSelector } from "react-redux";
-import { getUserById } from "../../../../store/users";
+import { getUserById } from "../../../store/users";
 
 const UserPage = () => {
     const { id } = useParams();

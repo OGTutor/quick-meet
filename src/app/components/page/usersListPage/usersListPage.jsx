@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-import { paginate } from "../../../../utils/paginate";
-import Pagination from "../../pagination";
-import GroupList from "../../groupList";
-import SearchStatus from "../../../ui/searchStatus";
-import UserTable from "../../../ui/usersTable";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import GroupList from "../../common/groupList";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/usersTable";
 
 import _ from "lodash";
-import { useAuth } from "../../../../hooks/useAuth";
 import {
     getProfessions,
     getProfessionsLoadingStatus
-} from "../../../../store/professions";
+} from "../../../store/professions";
 import { useSelector } from "react-redux";
-import { getUsersList } from "../../../../store/users";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
     const users = useSelector(getUsersList());
-    const { currentUser } = useAuth();
+    const currentUserId = useSelector(getCurrentUserId());
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [currentPage, setCurrentPage] = useState(1);
@@ -88,7 +87,7 @@ const UsersListPage = () => {
                       JSON.stringify(selectedProf)
               )
             : data;
-        return filteredUsers.filter((u) => u._id !== currentUser._id);
+        return filteredUsers.filter((u) => u._id !== currentUserId);
     }
     const filteredUsers = filterUsers(users);
 

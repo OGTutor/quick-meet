@@ -1,22 +1,23 @@
 import React from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
-import { getIsLoggedIn } from "../../store/users";
+import { getCurrentUserId, getIsLoggedIn } from "../../store/users";
 
 const ProtectedRoute = ({ children }) => {
     const location = useLocation();
-    const { currentUser } = useAuth();
-    const { id } = useParams();
     const isLoggedIn = useSelector(getIsLoggedIn());
+    const { id } = useParams();
 
     if (!isLoggedIn) {
         return <Navigate to="/login" state={{ from: location }} />;
-    } else if (currentUser._id !== id && children.type.name === "EditUser") {
+    }
+    const currentUserId = useSelector(getCurrentUserId());
+
+    if (currentUserId !== id && children.type.name === "EditUser") {
         return (
             <Navigate
-                to={`/users/${currentUser._id}/edit`}
+                to={`/users/${currentUserId}/edit`}
                 state={{ from: location }}
             />
         );

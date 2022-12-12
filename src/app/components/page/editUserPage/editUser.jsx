@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
-import { validator } from "../../../../utils/validator";
+import { validator } from "../../../utils/validator";
 
-import TextField from "../../form/textField";
-import SelectField from "../../form/selectField";
-import RadioField from "../../form/radioField";
-import MultiSelectField from "../../form/multiSelectField";
-import BackHistoryButton from "../../backButton";
+import TextField from "../../common/form/textField";
+import SelectField from "../../common/form/selectField";
+import RadioField from "../../common/form/radioField";
+import MultiSelectField from "../../common/form/multiSelectField";
+import BackHistoryButton from "../../common/backButton";
 import { useSelector } from "react-redux";
 import {
     getQualities,
     getQualitiesLoadingStatus
-} from "../../../../store/qualities";
+} from "../../../store/qualities";
 import {
     getProfessions,
     getProfessionsLoadingStatus
-} from "../../../../store/professions";
+} from "../../../store/professions";
 
 const EditUser = () => {
     const navigate = useNavigate();
