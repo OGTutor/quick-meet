@@ -1,11 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUserId } from "../../store/users";
 
 const BackHistoryButton = () => {
     const navigate = useNavigate();
+    const currentUserId = useSelector(getCurrentUserId());
 
     const handleBackToUserPage = () => {
-        navigate(-1);
+        navigate(`/users/${currentUserId}`);
     };
 
     return (

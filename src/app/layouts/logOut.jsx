@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logOut } from "../store/users";
 
 const LogOut = () => {
-    const { logOut } = useAuth();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     useEffect(() => {
-        logOut();
+        dispatch(logOut());
+        navigate("/");
     }, []);
 
     return (

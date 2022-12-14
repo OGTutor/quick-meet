@@ -6,7 +6,7 @@ import {
     getUsersLoadingStatus,
     loadUsersList
 } from "../../../store/users";
-import loadQualitiesList from "../../../store/qualities";
+import { loadQualitiesList } from "../../../store/qualities";
 import { loadProfessionsList } from "../../../store/professions";
 
 const AuthLoader = ({ children }) => {

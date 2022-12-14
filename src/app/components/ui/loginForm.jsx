@@ -4,8 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
-import { useDispatch } from "react-redux";
-import { signIn } from "../../store/users";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, signIn } from "../../store/users";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -15,8 +15,8 @@ const LoginForm = () => {
         password: "",
         stayOn: false
     });
+    const loginError = useSelector(getAuthErrors());
     const [errors, setErrors] = useState({});
-    const [enterError, setEnterError] = useState(null);
     const dispatch = useDispatch();
 
     const handleChange = (target) => {
@@ -24,7 +24,6 @@ const LoginForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
-        setEnterError(null);
     };
 
     const handleBackToRegister = () => {
@@ -56,14 +55,13 @@ const LoginForm = () => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
-        // const redirect = state.from.pathname ? state.from.pathname : "/";
-        dispatch(signIn({ payload: data, navigate }));
-        // if (
-        //     error.message ===
-        //     "Cannot read properties of null (reading 'from')"
-        // ) {
-        //     navigate(`/`);
-        // }
+        let redirect;
+        if (state === null) {
+            redirect = "/";
+        } else {
+            redirect = state.from.pathname ? state.from.pathname : "/";
+        }
+        dispatch(signIn({ payload: data, navigate, redirect }));
     };
 
     return (
@@ -95,12 +93,12 @@ const LoginForm = () => {
                             >
                                 Remain in the system
                             </CheckBoxField>
-                            {enterError && (
-                                <p className="text-danger">{enterError}</p>
+                            {loginError && (
+                                <p className="text-danger">{loginError}</p>
                             )}
                             <button
                                 type="submit"
-                                disabled={!isValid || enterError}
+                                disabled={!isValid}
                                 className="btn btn-outline-dark w-100 mx-auto"
                             >
                                 Submit

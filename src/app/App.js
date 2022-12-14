@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -13,22 +13,12 @@ import NotFoundPage from "./layouts/notFoundPage";
 
 import NavBar from "./components/ui/navBar";
 import ProtectedRoute from "./components/common/protectedRoute";
-import AuthProvider from "./hooks/useAuth";
 import AuthLoader from "./components/ui/hoc/authLoader";
-import { useDispatch } from "react-redux";
-import { loadProfessionsList } from "./store/professions";
-import { loadQualitiesList } from "./store/qualities";
 
 const App = () => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(loadQualitiesList());
-        dispatch(loadProfessionsList());
-    }, []);
-
     return (
         <>
-            <AuthProvider>
+            <AuthLoader>
                 <Routes>
                     <Route path="/" element={<NavBar />}>
                         <Route index element={<Main />} />
@@ -63,7 +53,7 @@ const App = () => {
                         <Route path="*" element={<NotFoundPage />} />
                     </Route>
                 </Routes>
-            </AuthProvider>
+            </AuthLoader>
 
             <ToastContainer />
         </>
