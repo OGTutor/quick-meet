@@ -1,33 +1,31 @@
-const createError = require("http-errors");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const cors = require("cors");
-const errorMiddleware = require("./middleware/error.middleware");
-
-require("./startup/db")();
+const express = require('express');
+const mongoose = require('mongoose');
+const config = require('config');
+const chalk = require('chalk');
 
 const app = express();
 
-var corsOptions = {
-    origin: "*",
-};
-app.use(cors(corsOptions));
-
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use("/index", (req, res, next) => {
-    res.status(200).send({ message: "Server is up", status: 200 });
-}); // test route
-require("./routes")(app);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404));
-});
+const PORT = config.get('port') ?? 8080;
 
-app.use(errorMiddleware);
+// if (process.env.NODE_ENV === 'production') {
+// 	console.log('Production');
+// } else {
+// 	console.log('Development');
+// }
 
-module.exports = app;
+async function start() {
+	try {
+		await mongoose.connect(config.get('mongoUri'));
+		app.listen(PORT, () => {
+			console.log(chalk.green(`Server has been started on port ${PORT}...`));
+		});
+	} catch (error) {
+		console.log(chalk.red(error.message));
+		process.exit(1);
+	}
+}
+
+start();
