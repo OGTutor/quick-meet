@@ -1,0 +1,32 @@
+[
+	{
+		"_id": "67rdca3eeb7f6fgeed471198",
+		"name": "Tedious",
+		"color": "primary"
+	},
+	{
+		"_id": "67rdca3eeb7f6fgeed471100",
+		"name": "Strange",
+		"color": "secondary"
+	},
+	{
+		"_id": "67rdca3eeb7f6fgeed4711012",
+		"name": "Troll",
+		"color": "success"
+	},
+	{
+		"_id": "67rdca3eeb7f6fgeed471101",
+		"name": "Alcoholic",
+		"color": "danger"
+	},
+	{
+		"_id": "67rdca3eeb7f6fgeed471102",
+		"name": "Pretty",
+		"color": "info"
+	},
+	{
+		"_id": "67rdca3eeb7f6fgeed471103",
+		"name": "Uncertain",
+		"color": "dark"
+	}
+]
