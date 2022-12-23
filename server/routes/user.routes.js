@@ -12,6 +12,8 @@ router.patch('/:userId', auth, async (req, res) => {
 				new: true,
 			});
 			res.send(updatedUser);
+		} else if (userId !== req.user._id) {
+			console.log('yea');
 		} else {
 			res.status(401).json({ message: 'Unauthorized' });
 		}

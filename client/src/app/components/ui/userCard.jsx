@@ -2,21 +2,30 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
     getProfessionById,
     getProfessionsLoadingStatus
 } from "../../store/professions";
-import { getCurrentUserId } from "../../store/users";
+import { getCurrentUserId, updateUser } from "../../store/users";
 
 const UserCard = ({ user }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const currentUserId = useSelector(getCurrentUserId());
     const userProfession = useSelector(getProfessionById(user.profession));
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
 
     const handleGoToEditUser = () => {
         navigate(`/users/${currentUserId}/edit`, { replace: false });
+    };
+
+    const handleIncreaseRate = () => {
+        const updatedRate = user.rate + 1;
+        dispatch(updateUser({ payload: { ...user, rate: updatedRate } }));
+    };
+    const handleDecreaseRate = () => {
+        console.log("DecreaseRate");
     };
 
     if (!professionsLoading && user) {
@@ -45,15 +54,29 @@ const UserCard = ({ user }) => {
                                 {userProfession.name}
                             </p>
                             <div className="text-muted">
-                                <i
-                                    className="bi bi-caret-down-fill text-primary"
-                                    role="button"
-                                ></i>
-                                <i
-                                    className="bi bi-caret-up text-secondary"
-                                    role="button"
-                                ></i>
-                                <span className="ms-2">{user.rate}</span>
+                                {currentUserId !== user._id ? (
+                                    <>
+                                        <i
+                                            onClick={handleDecreaseRate}
+                                            className="bi bi-caret-down-fill text-primary"
+                                            role="button"
+                                        ></i>
+                                        <i
+                                            onClick={handleIncreaseRate}
+                                            className="bi bi-caret-up text-secondary"
+                                            role="button"
+                                        ></i>
+                                        <span className="ms-2">
+                                            {user.rate}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="ms-2">
+                                            Rate: {user.rate}
+                                        </span>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
