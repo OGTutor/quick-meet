@@ -8,12 +8,16 @@ import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { useDispatch, useSelector } from "react-redux";
-import { getQualities } from "../../store/qualities";
-import { getProfessions } from "../../store/professions";
+import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../store/professions";
 import { signUp } from "../../store/users";
 
 const RegisterForm = () => {
     const dispatch = useDispatch();
+    const [isLoading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [data, setData] = useState({
         email: "",
@@ -25,11 +29,13 @@ const RegisterForm = () => {
         license: false
     });
     const qualities = useSelector(getQualities());
-    const qualitiesList = qualities.map((q) => ({
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+    const qualitiesList = qualities?.map((q) => ({
         label: q.name,
         value: q._id
     }));
     const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [errors, setErrors] = useState({});
 
     const handleBackToLogin = () => {
@@ -42,6 +48,17 @@ const RegisterForm = () => {
             [target.name]: target.value
         }));
     };
+
+    useEffect(() => {
+        if (
+            !professionsLoading &&
+            !qualitiesLoading &&
+            qualities &&
+            professions
+        ) {
+            setLoading(false);
+        }
+    }, [professionsLoading, qualitiesLoading, qualities, professions]);
 
     const validatorConfig = {
         email: {
@@ -106,79 +123,91 @@ const RegisterForm = () => {
             <div className="container mt-5">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 shadow p-4">
-                        <h3 className="mb-4">Register</h3>
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                label="Name"
-                                name="name"
-                                value={data.name}
-                                onChange={handleChange}
-                                error={errors.name}
-                            />
-                            <TextField
-                                label="Email"
-                                name="email"
-                                value={data.email}
-                                onChange={handleChange}
-                                error={errors.email}
-                            />
-                            <TextField
-                                label="Password"
-                                type="password"
-                                name="password"
-                                value={data.password}
-                                onChange={handleChange}
-                                error={errors.password}
-                            />
-                            <SelectField
-                                label="Choose your profession"
-                                value={data.profession}
-                                onChange={handleChange}
-                                defaultOption="Choose profession..."
-                                name="profession"
-                                options={professions}
-                                error={errors.profession}
-                            />
-                            <RadioField
-                                options={[
-                                    { name: "Male", value: "male" },
-                                    { name: "Female", value: "female" },
-                                    { name: "Other", value: "other" }
-                                ]}
-                                value={data.sex}
-                                name="sex"
-                                onChange={handleChange}
-                                label="Choose your gender"
-                            />
-                            <MultiSelectField
-                                options={qualitiesList}
-                                onChange={handleChange}
-                                defaultValue={data.qualities}
-                                name="qualities"
-                                label="Choose your qualities"
-                            />
-                            <CheckBoxField
-                                value={data.license}
-                                onChange={handleChange}
-                                name="license"
-                                error={errors.license}
-                            >
-                                I agree to the <a>license agreement</a>
-                            </CheckBoxField>
-                            <button
-                                type="submit"
-                                disabled={!isValid}
-                                className="btn btn-outline-dark w-100 mx-auto"
-                            >
-                                Submit
-                            </button>
-                        </form>
-                        <button
-                            className="btn btn-outline-primary mt-4"
-                            onClick={() => handleBackToLogin()}
-                        >
-                            Sign in instead
-                        </button>
+                        {!isLoading && Object.keys(professions).length > 0 ? (
+                            <>
+                                <h3 className="mb-4">Register</h3>
+                                <form onSubmit={handleSubmit}>
+                                    <TextField
+                                        label="Email"
+                                        name="email"
+                                        value={data.email}
+                                        onChange={handleChange}
+                                        error={errors.email}
+                                    />
+                                    <TextField
+                                        label="Name"
+                                        name="name"
+                                        value={data.name}
+                                        onChange={handleChange}
+                                        error={errors.name}
+                                    />
+                                    <TextField
+                                        label="Password"
+                                        type="password"
+                                        name="password"
+                                        value={data.password}
+                                        onChange={handleChange}
+                                        error={errors.password}
+                                    />
+                                    <SelectField
+                                        label="Choose your profession"
+                                        value={data.profession}
+                                        onChange={handleChange}
+                                        defaultOption="Choose profession..."
+                                        name="profession"
+                                        options={professions}
+                                        error={errors.profession}
+                                    />
+                                    <RadioField
+                                        options={[
+                                            { name: "Male", value: "male" },
+                                            { name: "Female", value: "female" },
+                                            { name: "Other", value: "other" }
+                                        ]}
+                                        value={data.sex}
+                                        name="sex"
+                                        onChange={handleChange}
+                                        label="Choose your gender"
+                                    />
+                                    <MultiSelectField
+                                        options={qualitiesList}
+                                        onChange={handleChange}
+                                        defaultValue={data.qualities}
+                                        name="qualities"
+                                        label="Choose your qualities"
+                                    />
+                                    <CheckBoxField
+                                        value={data.license}
+                                        onChange={handleChange}
+                                        name="license"
+                                        error={errors.license}
+                                    >
+                                        I agree to the <a>license agreement</a>
+                                    </CheckBoxField>
+                                    <button
+                                        type="submit"
+                                        disabled={!isValid}
+                                        className="btn btn-outline-dark w-100 mx-auto"
+                                    >
+                                        Submit
+                                    </button>
+                                </form>
+                                <button
+                                    className="btn btn-outline-primary mt-4"
+                                    onClick={() => handleBackToLogin()}
+                                >
+                                    Sign in instead
+                                </button>
+                            </>
+                        ) : (
+                            <div className="container mt-5">
+                                <div className="row">
+                                    <div className="col-md-6 offset-md-3 shadow p-4">
+                                        <h1>Loading...</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

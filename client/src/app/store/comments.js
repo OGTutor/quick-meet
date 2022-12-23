@@ -1,6 +1,5 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/comment.service";
-import { nanoid } from "nanoid";
 
 const commentsSlice = createSlice({
     name: "comments",
@@ -25,11 +24,9 @@ const commentsSlice = createSlice({
             state.entities.push(action.payload);
         },
         commentRemoved: (state, action) => {
-            if (action.payload.content === null) {
-                state.entities = state.entities.filter(
-                    (c) => c._id !== action.payload.commentId
-                );
-            }
+            state.entities = state.entities.filter(
+                (c) => c._id !== action.payload
+            );
         }
     }
 });
@@ -56,32 +53,25 @@ export const loadCommentsList = (userId) => async (dispatch) => {
     }
 };
 
-export const createComment =
-    ({ data, id, currentUserId }) =>
-    async (dispatch) => {
-        dispatch(addCommentRequested());
-        const comment = {
-            ...data,
-            _id: nanoid(),
-            pageId: id,
-            created_at: Date.now(),
-            userId: currentUserId
-        };
-        try {
-            const { content } = await commentService.createComment(comment);
-            dispatch(commentCreated(content));
-        } catch (error) {
-            dispatch(commentsRequestFailed(error.message));
-        }
-    };
+export const createComment = (payload) => async (dispatch) => {
+    dispatch(addCommentRequested());
+    try {
+        const { content } = await commentService.createComment(payload);
+        dispatch(commentCreated(content));
+    } catch (error) {
+        dispatch(commentsRequestFailed(error.message));
+    }
+};
 
 export const removeComment = (commentId) => async (dispatch) => {
     dispatch(removeCommentRequested());
     try {
         const { content } = await commentService.removeComment(commentId);
-        dispatch(commentRemoved({ content, commentId }));
+        if (!content) {
+            dispatch(commentRemoved(commentId));
+        }
     } catch (error) {
-        dispatch(commentsRequestFailed());
+        dispatch(commentsRequestFailed(error.message));
     }
 };
 
